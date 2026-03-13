@@ -1,0 +1,10 @@
+name = "tide-api-proxy"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Set these in the Cloudflare dashboard under:
+# Workers & Pages > tide-api-proxy > Settings > Variables
+#
+# TRUSTMRR_API_KEY = tmrr_your_key_here
+# FRED_API_KEY = your_fred_key_here
+# ALLOWED_ORIGIN = https://jaronwenger.github.io

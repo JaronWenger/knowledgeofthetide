@@ -113,12 +113,12 @@ export const ideas = [
 ]
 
 export const dataSources = [
-  { name: 'Google Trends', description: 'Search interest over time', status: 'active' },
-  { name: 'Crunchbase', description: 'Startup funding & valuations', status: 'active' },
-  { name: 'Reddit API', description: 'Community sentiment analysis', status: 'active' },
-  { name: 'BLS Data', description: 'Labor & economic statistics', status: 'active' },
-  { name: 'Product Hunt', description: 'New product launches', status: 'pending' },
+  { name: 'World Bank', description: 'Global economic indicators', status: 'active' },
+  { name: 'Reddit', description: 'Community sentiment & trends', status: 'active' },
+  { name: 'TrustMRR', description: 'Verified startup revenue data', status: 'active' },
+  { name: 'FRED', description: 'Federal Reserve economic data', status: 'active' },
   { name: 'SEC EDGAR', description: 'Public company filings', status: 'pending' },
-  { name: 'Patent Office', description: 'Innovation & IP trends', status: 'pending' },
-  { name: 'World Bank', description: 'Global economic indicators', status: 'pending' },
+  { name: 'USPTO Patents', description: 'Innovation & IP trends', status: 'pending' },
+  { name: 'Google Trends', description: 'Search interest over time', status: 'pending' },
+  { name: 'Product Hunt', description: 'New product launches', status: 'pending' },
 ]
