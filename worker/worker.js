@@ -20,6 +20,13 @@ const API_CONFIGS = {
       return u.toString()
     },
   },
+  reddit: {
+    base: 'https://www.reddit.com',
+    customHeaders: { 'User-Agent': 'KnowledgeOfTheTide/1.0' },
+  },
+  polymarket: {
+    base: 'https://gamma-api.polymarket.com',
+  },
 }
 
 function corsHeaders(origin, allowedOrigin) {
@@ -52,13 +59,11 @@ export default {
     }
 
     // Route: /api/{service}/{path}
-    // e.g. /api/trustmrr/startups?limit=10
-    // e.g. /api/fred/series/observations?series_id=UNRATE
     const match = url.pathname.match(/^\/api\/(\w+)\/(.+)/)
     if (!match) {
       return new Response(JSON.stringify({
         error: 'Invalid route',
-        usage: '/api/{service}/{path} — services: trustmrr, fred',
+        usage: '/api/{service}/{path} — services: trustmrr, fred, reddit, polymarket',
       }), {
         status: 400,
         headers: { ...headers, 'Content-Type': 'application/json' },
@@ -87,7 +92,10 @@ export default {
     }
 
     // Build upstream request headers
-    const upstreamHeaders = { 'Content-Type': 'application/json' }
+    const upstreamHeaders = config.customHeaders
+      ? { ...config.customHeaders }
+      : { 'Content-Type': 'application/json' }
+
     if (config.authHeader) {
       upstreamHeaders['Authorization'] = config.authHeader(env)
     }
@@ -101,7 +109,7 @@ export default {
         headers: {
           ...headers,
           'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=300', // cache 5 min
+          'Cache-Control': 'public, max-age=300',
         },
       })
     } catch (err) {

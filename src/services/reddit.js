@@ -1,8 +1,4 @@
-const PROXIES = [
-  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-]
+const WORKER_URL = import.meta.env.VITE_WORKER_URL || ''
 
 const SUBREDDITS = [
   { name: 'startups', sort: 'top', time: 'week' },
@@ -11,26 +7,18 @@ const SUBREDDITS = [
   { name: 'smallbusiness', sort: 'top', time: 'week' },
 ]
 
-async function fetchWithProxy(redditUrl) {
-  for (const makeUrl of PROXIES) {
-    try {
-      const res = await fetch(makeUrl(redditUrl), {
-        signal: AbortSignal.timeout(8000),
-      })
-      if (!res.ok) continue
-      const text = await res.text()
-      const json = JSON.parse(text)
-      if (json?.data?.children) return json
-    } catch {
-      continue
-    }
-  }
-  throw new Error('All proxies failed')
-}
-
 async function fetchSubreddit(subreddit, sort = 'top', time = 'week', limit = 10) {
-  const redditUrl = `https://www.reddit.com/r/${subreddit}/${sort}.json?t=${time}&limit=${limit}&raw_json=1`
-  const json = await fetchWithProxy(redditUrl)
+  const path = `r/${subreddit}/${sort}.json`
+  const params = `?t=${time}&limit=${limit}&raw_json=1`
+
+  // Use Cloudflare worker if available, otherwise try direct
+  const url = WORKER_URL
+    ? `${WORKER_URL}/api/reddit/${path}${params}`
+    : `https://www.reddit.com/${path}${params}`
+
+  const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
+  if (!res.ok) throw new Error(`Reddit fetch error: ${res.status}`)
+  const json = await res.json()
 
   return json.data.children
     .filter((c) => c.kind === 't3')
