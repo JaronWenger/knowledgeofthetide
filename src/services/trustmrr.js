@@ -42,10 +42,13 @@ const FALLBACK = [
   { name: 'LogoFast', slug: 'logofast', category: 'design', mrr: 8500, growth30d: 4.2, customers: 5600, description: 'Make beautiful logos with AI in 5 minutes.', onSale: true },
 ]
 
-export async function getTopStartups(limit = 12) {
+export async function getTopStartups(limit = 50) {
   try {
-    const result = await fetchFromWorker('startups', { limit, sort: 'revenue-desc' })
-    if (result?.data) return result.data.map(formatStartup)
+    const result = await fetchFromWorker('startups', { limit: limit + 10, sort: 'revenue-desc' })
+    if (result?.data) return result.data
+      .filter((s) => !s.name?.toLowerCase().includes('anonymous'))
+      .map(formatStartup)
+      .slice(0, limit)
   } catch {
     // fall through to static data
   }

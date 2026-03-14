@@ -35,6 +35,11 @@
   font-size: 1.1rem;
   color: var(--text-primary);
   letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.nav-brand:hover {
+  color: var(--text-primary);
 }
 
 .nav-logo {
@@ -69,7 +74,8 @@
   color: var(--text-primary);
 }
 
-.nav-links a.active::after {
+.nav-links a.active::after,
+.nav-links a[aria-current="page"]::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -78,6 +84,10 @@
   height: 2px;
   background: var(--gradient-primary);
   border-radius: 1px;
+}
+
+.nav-links a[aria-current="page"] {
+  color: var(--text-primary);
 }
 
 .nav-status {
@@ -249,8 +259,13 @@
 /* ===== Sections ===== */
 .section {
   padding: 5rem 2rem;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.page-section:first-child {
+  padding-top: 7rem;
 }
 
 .section-header {
@@ -721,15 +736,15 @@
 /* ===== FRED Indicators ===== */
 .fred-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
 }
 
 .fred-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+  padding: 1.75rem;
   transition: border-color 0.2s;
 }
 
@@ -747,7 +762,7 @@
 }
 
 .fred-value {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
   font-family: var(--font-mono);
   color: var(--text-primary);
@@ -776,8 +791,9 @@
 .fred-sparkline {
   display: flex;
   align-items: flex-end;
-  gap: 3px;
-  height: 36px;
+  gap: 4px;
+  height: 48px;
+  margin-top: 0.5rem;
 }
 
 .spark-bar {
@@ -801,11 +817,98 @@
   opacity: 1;
 }
 
+/* ===== Filters Bar ===== */
+.filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.filter-chip:hover {
+  border-color: var(--border-glow);
+  color: var(--text-secondary);
+}
+
+.filter-chip.active {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.filter-chip.sale-active {
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.filter-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-select:hover,
+.filter-select:focus {
+  border-color: var(--border-glow);
+}
+
+.filter-select option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.filter-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
 /* ===== Startup Cards ===== */
 .startups-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.25rem;
+}
+
+a.startup-card {
+  text-decoration: none;
+  color: var(--text-primary);
+  cursor: pointer;
 }
 
 .startup-card {
@@ -1053,6 +1156,39 @@
   padding: 2rem;
 }
 
+/* ===== Refresh Button ===== */
+.refresh-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem;
+  margin-left: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.refresh-btn:hover {
+  color: var(--accent-cyan);
+  border-color: var(--border-glow);
+}
+
+.refresh-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.refresh-btn .spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ===== Loading Skeleton ===== */
 .skeleton {
   background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
@@ -1096,7 +1232,8 @@
 
   .trends-grid,
   .ideas-grid,
-  .startups-grid {
+  .startups-grid,
+  .fred-grid {
     grid-template-columns: 1fr;
   }
 
